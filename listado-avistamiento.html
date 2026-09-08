@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Listado Avistamientos</title>
+    <link rel="stylesheet" href="css/estilos.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="js/lista.js" defer></script>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="png/logo.png" alt="Logo de la página">
+            <h1>Listado de Avistamientos</h1>
+        </div>
+        
+        <nav>
+        <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="registro-voluntario.html">Registro Voluntario</a></li>
+            <li><a href="informar-avistamiento.html">Informar Avistamiento</a></li>
+            <li><a href="listado-avistamiento.html">Listado Avistamientos</a></li>
+            <li><a href="graficos.html">Estadistica</a></li>
+        </ul>
+    </nav>
+    </header>
+    <main>
+        <section>
+            <h2>Avistamientos Registrados</h2>
+            <label for="filtro">Tipo del Ave:</label>
+            <select id="filtro">
+                <option value="">Todos</option>
+                <option value="Paseriforme">Paseriforme</option>
+                <option value="Rapaz">Rapaz</option>
+                <option value="Anseriforme">Anseriforme</option>
+                <option value="Corredoras">Corredoras</option>
+            </select>
+            <label for="orden">Ordenar por:</label>
+            <select id="orden">
+                <option value="fecha">Fecha</option>
+                <option value="lugar">Lugar</option>
+            </select>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre del Ave</th>
+                        <th>Tipo de Ave</th>
+                        <th>Hora del Avistamiento</th>
+                        <th>Fecha del Avistamiento</th>
+                        <th>Lugar del Avistamiento</th>
+                    </tr>
+                </thead>
+                <tbody id="cuerpo-tabla">
+                </tbody>
+            </table>
+        </section>
+        <nav>
+            <button id="anterior">Anterior</button>
+            <span id="pagina-actual">Página 1</span>
+            <button id="siguiente">Siguiente</button>
+        </nav>
+    </main>
+    <footer>
+        <p>CC5002 - Desarrollo de Aplicaciones Web</p>
+    </footer>
+</body>
+</html>
