@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Estadísticas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="{{ url_for('static', filename='js/grafi.js') }}" defer></script>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo de la página">
+            <h1>Estadísticas</h1> 
+        </div>
+        
+        <nav>
+        <ul>
+            <li><a href="{{ url_for('index') }}">Inicio</a></li>
+            <li><a href="{{ url_for('registro_voluntario') }}">Registro Voluntario</a></li>
+            <li><a href="{{ url_for('informar_avistamiento') }}">Informar Avistamiento</a></li>
+            <li><a href="{{ url_for('listado_avistamiento') }}">Listado Avistamientos</a></li>
+            <li><a href="{{ url_for('graficos') }}">Estadisticas</a></li>
+        </ul>
+    </nav>
+    </header>
+
+    <main>
+        <section>
+            <h2>Indicadores y métricas</h2>
+            <h3>Voluntarios registrados por región</h3>
+            <div id="grafico1">
+            </div>
+            <h3>Avistamientos por tipo de ave</h3>
+            <div id="grafico2">
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>CC5002 - Desarrollo de Aplicaciones Web</p>
+    </footer>
+</body>
+</html>

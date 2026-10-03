@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalle Avistamiento</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
+</head>
+<body>
+    <h1>Detalle del Avistamiento</h1>
+    <dl>
+        <dt>Ave:</dt>
+        <dd>{{ avistamiento.ave.nombre }}</dd>
+
+        <dt>Voluntario:</dt>
+        <dd>{{ avistamiento.voluntario.nombre }}</dd>
+
+        <dt>Hora del Avistamiento:</dt>
+        <dd>{{ avistamiento.fecha_hora.strftime("%H:%M") }}</dd>
+
+        <dt>Fecha del Avistamiento:</dt>
+        <dd>{{ avistamiento.fecha_hora.strftime("%Y-%m-%d") }}</dd>
+
+        <dt>Lugar del Avistamiento:</dt>
+        <dd>{{ avistamiento.lugar }}</dd>
+    </dl>
+    <h2>Archivos Adjuntos</h2>
+    {% for registro in registros %}
+        {% if registro.ruta_archivo.endswith('.mp4') %}
+            <video controls>
+                <source src="{{ url_for('static', filename=registro.ruta_archivo) }}">
+            </video>
+        {% else %}
+            <img src="{{ url_for('static', filename=registro.ruta_archivo) }}" alt="{{ registro.nombre_archivo }}">
+        {% endif %}
+    {% endfor %}
+
+</body>

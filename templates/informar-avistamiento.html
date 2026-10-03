@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Informar Avistamiento</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="{{ url_for('static', filename='js/infor-avist.js') }}" defer></script>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo de la página">
+            <h1>Informar Avistamiento</h1>
+        </div>
+        <nav>
+        <ul>
+            <li><a href="{{ url_for('index') }}">Inicio</a></li>
+            <li><a href="{{ url_for('registro_voluntario') }}">Registro Voluntario</a></li>
+            <li><a href="{{ url_for('informar_avistamiento') }}">Informar Avistamiento</a></li>
+            <li><a href="{{ url_for('listado_avistamiento') }}">Listado Avistamientos</a></li>
+            <li><a href="{{ url_for('graficos') }}">Estadisticas</a></li>
+        </ul>
+    </nav>
+    </header>
+    <main>
+        <section>
+            <h2>Formulario de Informe de Avistamiento</h2>
+            <form id="formulario-informe" method="POST" enctype="multipart/form-data">
+
+                {% if error_form %}
+                    <p class="error visible">{{ error_form }}</p>
+                {% endif %}
+
+                <div>
+                    <label for="email">Email del Voluntario:<span class="obligatorio">*</span></label><br>
+                    <input type="email" id="email" name="email">
+                    {% if errores.email %}
+                        <p class="error visible">{{ errores.email }}</p>
+                    {% endif %}
+                    <p id="error-email" class="error">
+                        El email debe ser válido y registrado.
+                    </p>
+
+
+                </div>
+                <br>
+                <div>
+                    <label for="nombre">Nombre del Ave:<span class="obligatorio">*</span></label><br>
+                    <select id="select-ave" name="ave">
+                        <option value="">Seleccione un ave</option>
+                        {% for ave in aves %}
+                            <option value="{{ ave.id }}">{{ ave.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                    {% if errores.ave %}
+                        <p class="error visible">{{ errores.ave }}</p>
+                    {% endif %}
+                    <p id ="error-ave" class="error">
+                        Debe seleccionar un ave.
+                    </p>
+                </div>
+                <br>
+                <div>
+                    <label for="select-tipo">Tipo de Ave:<span class="obligatorio">*</span></label><br>
+                    <select id="select-tipo" name="tipo">
+                        <option value="">Seleccione un tipo</option>
+                        <option value="Paseriforme">Paseriforme</option>
+                        <option value="Rapaz">Rapaz</option>
+                        <option value="Anseriforme">Anseriforme</option>
+                        <option value="Corredoras">Corredoras</option>
+                    </select>
+                    <p id="error-tipo" class="error">
+                        El tipo de ave es obligatorio.
+                    </p>
+                </div>
+                <br>
+                <div>
+                    <label for="lugar">Lugar del Avistamiento:<span class="obligatorio">*</span></label><br>
+                    <input type="text" id="lugar" name="lugar">
+                    {% if errores.lugar %}
+                        <p class="error visible">{{ errores.lugar }}</p>
+                    {% endif %}
+                    <p id="error-lugar" class="error">
+                        El lugar debe tener al menos 3 caracteres.
+                    </p>
+                </div>
+                <br>
+                <div>
+                    <label for="fecha">Fecha del Avistamiento:<span class="obligatorio">*</span></label><br>
+                    <input type="date" id="fecha" name="fecha">
+                    {% if errores.fecha %}
+                        <p class="error visible">{{ errores.fecha }}</p>
+                    {% endif %}
+                    <p id="error-fecha" class="error">
+                        Ingrese una fecha de avistamiento valida.
+                    </p>
+                </div>
+                <br>
+                <div>
+                    <label for="hora">Hora del Avistamiento:<span class="obligatorio">*</span></label><br>
+                    <input type="time" id="hora" name="hora">
+                    {% if errores.hora %}
+                        <p class="error visible">{{ errores.hora }}</p>
+                    {% endif %}
+                    <p id="error-hora" class="error">
+                        La hora del avistamiento es obligatoria.
+                    </p>
+                </div>
+                <br>
+                <div>
+                    <label for="archivo">Archivos Adjuntos:<span class="obligatorio">*</span></label><br>
+                    <input type="file" id="archivo" name="archivos" accept="image/*,video/*" multiple>
+                    {% if errores.archivos %}
+                        <p class="error visible">{{ errores.archivos }}</p>
+                    {% endif %}
+                    <p id="error-archivo" class="error">
+                        Debe adjuntar al menos una foto o video.
+                    </p>
+                </div>
+                <br>
+                <button type="submit">Enviar Informe</button>
+            </form>
+        </section>
+    </main>
+    <footer>
+        <p>CC5002 - Desarrollo de Aplicaciones Web</p>
+    </footer>
+</body>        
+</html>

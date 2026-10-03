@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro Voluntario</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="{{ url_for('static', filename='js/regis-volun.js') }}" defer></script>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo de la página">
+            <h1>Registro de Voluntario</h1>
+        </div>
+        
+        <nav>
+        <ul>
+            <li><a href="{{ url_for('index') }}">Inicio</a></li>
+            <li><a href="{{ url_for('registro_voluntario') }}">Registro Voluntario</a></li>
+            <li><a href="{{ url_for('informar_avistamiento') }}">Informar Avistamiento</a></li>
+            <li><a href="{{ url_for('listado_avistamiento') }}">Listado Avistamientos</a></li>
+            <li><a href="{{ url_for('graficos') }}">Estadisticas</a></li>
+        </ul>
+    </nav>
+    </header>
+    <main>
+        <section>
+            <h2>Formulario de Registro de Voluntario</h2>
+            <form id="formulario-registro" method="POST">
+                <div>
+                    <label for="nombre">Nombre: <span class="obligatorio">*</span></label><br>
+                    <input type="text" id="nombre" name="nombre">
+                    {% if errores.nombre %}
+                        <p class="error visible">{{ errores.nombre }}</p>
+                    {% endif %}
+                    <p id="error-nombre" class="error">
+                        El nombre debe tener al menos 3 caracteres.
+                    </p>
+                </div>
+                <br>
+                <div>
+                    <label for="email">Correo Electrónico:<span class="obligatorio">*</span></label><br>
+                    <input type="email" id="email" name="email">
+                    {% if errores.email %}
+                        <p class="error visible">{{ errores.email }}</p>
+                    {% endif %}
+                    <p id="error-email" class="error">
+                        El correo electrónico no es válido.
+                    </p>
+                </div>
+                <br>
+                <div>
+                    <label for="telefono">Teléfono: <span class="obligatorio">*</span></label><br>
+                    <input type="tel" id="telefono" name="telefono">
+                    {% if errores.telefono %}
+                        <p class="error visible">{{ errores.telefono }}</p>
+                    {% endif %}
+                    <p id="error-telefono" class="error">
+                        El teléfono debe tener 9 dígitos.
+                    </p>
+                </div>
+                <br> 
+                <div>
+                    <label for="select-reg">Región: <span class="obligatorio">*</span></label><br>
+                    <select id="select-reg" name="region">
+                        <option value="">Seleccione una región</option>
+
+                        {% for region in regiones %}
+                            <option value="{{ region.id }}">{{ region.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                    {% if errores.region %}
+                        <p class="error visible">{{ errores.region }}</p>
+                    {% endif %}
+                    <p id="error-region" class="error">
+                        Debe seleccionar una región.
+                    </p>
+                </div>
+                <br>    
+                <div>
+                    <label for="select-com">Comuna: <span class="obligatorio">*</span></label><br>
+                    <select id="select-com" name="comuna" disabled>
+                        <option value="">Seleccione una comuna</option>
+                    </select>
+                    {% if errores.comuna %}
+                        <p class="error visible">{{ errores.comuna }}</p>
+                    {% endif %}
+                    <p id="error-comuna" class="error">
+                        Debe seleccionar una comuna.
+                    </p>
+                </div>
+                <br>
+                <button type="submit">Registrar</button>
+            </form>
+        </section>
+    </main>
+    <footer>
+        <p>CC5002 - Desarrollo de Aplicaciones Web</p>
+    </footer>
+    
+</body>        
+
+</html>

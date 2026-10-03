@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Listado Avistamientos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo de la página">
+            <h1>Listado de Avistamientos</h1>
+        </div>
+        
+        <nav>
+        <ul>
+            <li><a href="{{ url_for('index') }}">Inicio</a></li>
+            <li><a href="{{ url_for('registro_voluntario') }}">Registro Voluntario</a></li>
+            <li><a href="{{ url_for('informar_avistamiento') }}">Informar Avistamiento</a></li>
+            <li><a href="{{ url_for('listado_avistamiento') }}">Listado Avistamientos</a></li>
+            <li><a href="{{ url_for('graficos') }}">Estadisticas</a></li>
+        </ul>
+    </nav>
+    </header>
+    <main>
+        <section>
+            <h2>Avistamientos Registrados</h2>
+            <label for="filtro">Tipo del Ave:</label>
+            <select id="filtro">
+                <option value="">Todos</option>
+                <option value="Paseriforme">Paseriforme</option>
+                <option value="Rapaz">Rapaz</option>
+                <option value="Anseriforme">Anseriforme</option>
+                <option value="Corredoras">Corredoras</option>
+            </select>
+            <label for="orden">Ordenar por:</label>
+            <select id="orden">
+                <option value="fecha">Fecha</option>
+                <option value="lugar">Lugar</option>
+            </select>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre del Ave</th>
+                        <th>Tipo de Ave</th>
+                        <th>Hora del Avistamiento</th>
+                        <th>Fecha del Avistamiento</th>
+                        <th>Lugar del Avistamiento</th>
+                    </tr>
+                </thead>
+                <tbody id="cuerpo-tabla">
+                    {% for avistamiento in avistamientos %}
+                        <tr onclick="window.location.href='{{ url_for('detalle_avistamiento', avistamiento_id=avistamiento.id) }}'">
+                            <td>{{ avistamiento.ave.nombre }}</td>
+                            <td>-</td>
+                            <td>{{ avistamiento.fecha_hora.strftime("%H:%M") }}</td>
+                            <td>{{ avistamiento.fecha_hora.strftime("%Y-%m-%d") }}</td>
+                            <td>{{ avistamiento.lugar }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+        <nav>
+            {% if pagina_actual > 1 %}
+                <a href="{{ url_for('listado_avistamiento', pagina=pagina_actual-1) }}">
+                <button >Anterior</button>
+                </a>
+            {% endif %}
+            <span id="pagina-actual">Página {{ pagina_actual }} de {{ total_paginas }}</span>
+            {% if pagina_actual < total_paginas %}
+                <a href="{{ url_for('listado_avistamiento', pagina=pagina_actual+1) }}">
+                <button >Siguiente</button>
+                </a>
+            {% endif %}
+        </nav>
+    </main>
+    <footer>
+        <p>CC5002 - Desarrollo de Aplicaciones Web</p>
+    </footer>
+</body>
+</html>
