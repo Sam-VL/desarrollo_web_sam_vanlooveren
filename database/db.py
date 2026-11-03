@@ -56,6 +56,7 @@ class Avistamiento(Base):
     descripcion = Column(Text, nullable=True)
     
     voluntario = relationship("Voluntario", back_populates="avistamientos")
+    comentarios = relationship("Comentario", back_populates="avistamiento")
     ave = relationship("Ave", back_populates="avistamientos")
     registros = relationship("Registro", back_populates="avistamiento")
 
@@ -70,3 +71,12 @@ class Voluntario(Base):
 
     comuna = relationship("Comuna")
     avistamientos = relationship("Avistamiento", back_populates="voluntario")
+
+class Comentario(Base):
+    __tablename__ = 'comentario'
+    id = Column(Integer, primary_key=True)
+    nombre = Column(String(80), nullable=False)
+    texto = Column(String(300), nullable=False)
+    fecha = Column(DateTime, nullable=False)
+    avistamiento_id = Column(Integer, ForeignKey('avistamiento.id'), nullable=False)
+    avistamiento = relationship("Avistamiento", back_populates="comentarios")

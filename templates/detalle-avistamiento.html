@@ -34,4 +34,42 @@
         {% endif %}
     {% endfor %}
 
+    <h2>Comentarios</h2>
+    <div id = "lista-comentarios" data-avistamiento-id="{{ avistamiento.id }}">
+    </div>
+
+    
+
+    <h3>Agregar comentario</h3>
+    <form id="form-comentario">
+    <div>
+        <label for="nombre-comentario">Nombre: <span class="obligatorio">*</span></label>
+        <br>
+        <input type="text" id="nombre-comentario"
+           name="nombre" minlength="3" maxlength="50" required>
+        <p id="error-nombre-comentario" class="error">
+            El nombre debe tener entre 3 y 50 caracteres.
+        </p>
+    </div>
+    <br>
+
+    <div>
+    <label for="texto-comentario">Comentario: <span class="obligatorio">*</span></label>
+    <br>
+    <textarea id="texto-comentario" name="texto"
+            rows="3" cols="40" minlength="5" maxlength="300" required></textarea>
+    <p id="error-texto-comentario" class="error">
+        El comentario debe tener entre 5 y 300 caracteres.
+    </p>
+    </div>
+    <br>
+
+    <p id="error-envio-comentario" class="error"></p>
+
+    <button type="button" id="boton-agregar-comentario">
+        Agregar comentario
+    </button>
+
+    </form>
+    <script src="{{ url_for('static', filename='js/comentarios.js') }}"></script>
 </body>

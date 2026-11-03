@@ -1,5 +1,5 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
-from database.db import SessionLocal, Region, Comuna, Registro, Ave, Avistamiento, Voluntario
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
+from database.db import SessionLocal, Region, Comuna, Registro, Ave, Avistamiento, Voluntario, Comentario
 from datetime import datetime
 from werkzeug.utils import secure_filename
 import os
@@ -193,6 +193,133 @@ def detalle_avistamiento(avistamiento_id):
 @app.route('/graficos', methods=['GET'])
 def graficos():
     return render_template('graficos.html')
+
+@app.route("/get-stats-data", methods=["GET"])
+def get_stats_data():
+    db = SessionLocal()
+    avistamientos = db.query(Avistamiento).all()
+    conteo = {}
+
+    for avistamiento in avistamientos:
+        fecha = avistamiento.fecha_hora.strftime("%Y-%m-%d")
+
+        if fecha not in conteo:
+            conteo[fecha] = 0
+
+        conteo[fecha] += 1
+
+    db.close()
+    resultado = []
+
+    for fecha in sorted(conteo):
+        resultado.append({
+            'date': fecha,
+            'count': conteo[fecha]
+        })
+
+    return jsonify(resultado)
+
+@app.route("/get-stats-aves", methods=["GET"])
+def get_stats_aves():
+    db = SessionLocal()
+    avistamientos = db.query(Avistamiento).all()
+    conteo = {}
+    
+    for avistamiento in avistamientos:
+        nombre = avistamiento.ave.nombre
+    
+        if nombre not in conteo:
+            conteo[nombre] = 0
+    
+        conteo[nombre] += 1
+    
+    db.close()
+    resultado = []
+    
+    for nombre in sorted(conteo):
+        resultado.append({
+            'name': nombre,
+            'count': conteo[nombre]
+        })
+    
+    return jsonify(resultado)
+
+
+@app.route("/get-stats-comunas", methods=["GET"])
+def get_stats_comunas():
+    db = SessionLocal()
+    voluntarios = db.query(Voluntario).all()
+    conteo = {}
+    
+    for voluntario in voluntarios:
+        nombre = voluntario.comuna.nombre
+    
+        if nombre not in conteo:
+            conteo[nombre] = 0
+    
+        conteo[nombre] += 1
+    
+    db.close()
+    resultado = []
+    
+    for nombre in sorted(conteo):
+        resultado.append({
+            'name': nombre,
+            'count': conteo[nombre]
+        })
+    
+    return jsonify(resultado)
+
+
+@app.route('/comentarios/<int:avistamiento_id>', methods=['GET'])
+def obtener_comentarios(avistamiento_id):
+    db = SessionLocal()
+    comentarios = db.query(Comentario).filter(Comentario.avistamiento_id == avistamiento_id).all()
+    resultado = []
+    for comentario in comentarios:
+        resultado.append({
+            'id': comentario.id,
+            'nombre': comentario.nombre,
+            'texto': comentario.texto,
+            'fecha': comentario.fecha.strftime('%Y-%m-%d %H:%M:%S')
+        })
+    db.close()
+    return jsonify(resultado)
+
+@app.route('/comentarios/<int:avistamiento_id>', methods=['POST'])
+def agregar_comentario(avistamiento_id):
+    datos = request.get_json(silent=True)
+    if not isinstance(datos, dict):
+        return jsonify({"status": "error", "data": "Datos inválidos"}), 400
+    nombre = datos.get('nombre', '')
+    texto = datos.get('texto', '')
+
+    if not isinstance(nombre, str) or not isinstance(texto, str):
+        return jsonify({"status": "error", "data": "Datos inválidos"}), 400
+
+    nombre = nombre.strip()
+    texto = texto.strip()
+
+    if len(nombre) < 3 or len(nombre) > 50:
+        return jsonify({"status": "error", "data": "Nombre inválido"}), 400
+
+    if len(texto) < 5 or len(texto) > 300:
+        return jsonify({"status": "error", "data": "Texto inválido"}), 400
+
+    db = SessionLocal()
+
+    avistamiento = db.query(Avistamiento).filter(Avistamiento.id == avistamiento_id).first()
+
+    if avistamiento is None:
+        db.close()
+        return jsonify({"status": "error", "data": "Avistamiento no se encontro"}), 404
+
+    nuevo_comentario = Comentario(nombre = nombre, texto = texto, fecha = datetime.now(), avistamiento_id = avistamiento_id)
+    db.add(nuevo_comentario)
+    db.commit()
+    db.close()
+
+    return jsonify({"status": "ok"}), 201
 
 if __name__ == '__main__':
     app.run(debug=True)
